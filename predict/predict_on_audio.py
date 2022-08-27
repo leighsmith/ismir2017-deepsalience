@@ -8,13 +8,8 @@ import os
 import scipy
 import csv
 
-from keras.models import Model
-from keras.layers import Dense, Input, Reshape, Lambda
-from keras.layers.convolutional import Conv2D
-from keras.layers.normalization import BatchNormalization
-from keras import backend as K
-from keras.models import load_model
-
+import tensorflow as tf
+ 
 TASKS = ['bass', 'melody1', 'melody2', 'melody3', 'multif0', 'pitch', 'vocal']
 BINS_PER_OCTAVE = 60
 N_OCTAVES = 6
@@ -80,10 +75,10 @@ def compute_hcqt(audio_fpath):
 def bkld(y_true, y_pred):
     """KL Divergence where both y_true an y_pred are probabilities
     """
-    y_true = K.clip(y_true, K.epsilon(), 1.0 - K.epsilon())
-    y_pred = K.clip(y_pred, K.epsilon(), 1.0 - K.epsilon())
-    return K.mean(K.mean(
-        -1.0*y_true* K.log(y_pred) - (1.0 - y_true) * K.log(1.0 - y_pred),
+    y_true = tf.keras.backend.clip(y_true, tf.keras.backend.epsilon(), 1.0 - tf.keras.backend.epsilon())
+    y_pred = tf.keras.backend.clip(y_pred, tf.keras.backend.epsilon(), 1.0 - tf.keras.backend.epsilon())
+    return tf.keras.backend.mean(tf.keras.backend.mean(
+        -1.0*y_true* tf.keras.backend.log(y_pred) - (1.0 - y_true) * tf.keras.backend.log(1.0 - y_pred),
         axis=-1), axis=-1)
 
 
@@ -92,27 +87,27 @@ def model_def():
 
     Returns
     -------
-    model : Model
+    model : tf.keras.Model
         Compiled keras model
     """
-    input_shape = (None, None, 6)
-    inputs = Input(shape=input_shape)
+    input_shape = (None, None, len(HARMONICS))
+    inputs = tf.keras.Input(shape=input_shape)
 
-    y0 = BatchNormalization()(inputs)
-    y1 = Conv2D(128, (5, 5), padding='same', activation='relu', name='bendy1')(y0)
-    y1a = BatchNormalization()(y1)
-    y2 = Conv2D(64, (5, 5), padding='same', activation='relu', name='bendy2')(y1a)
-    y2a = BatchNormalization()(y2)
-    y3 = Conv2D(64, (3, 3), padding='same', activation='relu', name='smoothy1')(y2a)
-    y3a = BatchNormalization()(y3)
-    y4 = Conv2D(64, (3, 3), padding='same', activation='relu', name='smoothy2')(y3a)
-    y4a = BatchNormalization()(y4)
-    y5 = Conv2D(8, (70, 3), padding='same', activation='relu', name='distribute')(y4a)
-    y5a = BatchNormalization()(y5)
-    y6 = Conv2D(1, (1, 1), padding='same', activation='sigmoid', name='squishy')(y5a)
-    predictions = Lambda(lambda x: K.squeeze(x, axis=3))(y6)
+    y0 = tf.keras.layers.BatchNormalization()(inputs)
+    y1 = tf.keras.layers.Conv2D(128, (5, 5), padding='same', activation='relu', name='bendy1')(y0)
+    y1a = tf.keras.layers.BatchNormalization()(y1)
+    y2 = tf.keras.layers.Conv2D(64, (5, 5), padding='same', activation='relu', name='bendy2')(y1a)
+    y2a = tf.keras.layers.BatchNormalization()(y2)
+    y3 = tf.keras.layers.Conv2D(64, (3, 3), padding='same', activation='relu', name='smoothy1')(y2a)
+    y3a = tf.keras.layers.BatchNormalization()(y3)
+    y4 = tf.keras.layers.Conv2D(64, (3, 3), padding='same', activation='relu', name='smoothy2')(y3a)
+    y4a = tf.keras.layers.BatchNormalization()(y4)
+    y5 = tf.keras.layers.Conv2D(8, (70, 3), padding='same', activation='relu', name='distribute')(y4a)
+    y5a = tf.keras.layers.BatchNormalization()(y5)
+    y6 = tf.keras.layers.Conv2D(1, (1, 1), padding='same', activation='sigmoid', name='squishy')(y5a)
+    predictions = tf.keras.layers.Lambda(lambda x: tf.keras.backend.squeeze(x, axis=3))(y6)
 
-    model = Model(inputs=inputs, outputs=predictions)
+    model = tf.keras.Model(inputs=inputs, outputs=predictions)
     model.compile(loss=bkld, metrics=['mse'], optimizer='adam')
     return model
 
@@ -134,7 +129,7 @@ def load_model(task):
 
     Returns
     -------
-    model : Model
+    model : tf.keras.Model
         Pretrained, precompiled Keras model
 
     """
@@ -156,7 +151,7 @@ def get_single_test_prediction(model, input_hcqt):
 
     Parameters
     ----------
-    model : Model
+    model : tf.keras.Model
         Pretrained model
     input_hcqt : np.ndarray
         HCQT
