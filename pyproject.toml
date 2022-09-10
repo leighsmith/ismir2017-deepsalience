@@ -6,7 +6,7 @@ authors = []
 
 [tool.poetry.dependencies]
 python = "3.8.13"
-tensorflow = "2.2.3"
+tensorflow = "2.9.1"
 pescador = "1.0.0"
 librosa = "0.8.0"
 mir_eval = "0.4"
