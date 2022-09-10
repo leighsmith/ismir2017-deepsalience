@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "ismir2017-deepsalience"
+name = "deepsalience"
 version = "0.1.0"
 description = "soundBrilliance fork of rabitt/ismir2017-deepsalience"
 authors = []
@@ -11,7 +11,6 @@ pescador = "2.1.0"
 librosa = "0.8.0"
 mir_eval = "0.4"
 joblib = "0.14.0"
-
 
 [build-system]
 requires = ["poetry-core"]
