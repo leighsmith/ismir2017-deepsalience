@@ -16,6 +16,6 @@ python_dependencies:
   - librosa==0.5.0
   - mir_eval==0.4
   - joblib==0.11
-python_version: 3.7.6
+python_version: 3.8.13
 system_dependencies:
   - ffmpeg
