@@ -285,11 +285,12 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "mir-eval"
-version = "0.7"
+version = "0.8"
 description = "Common metrics for common audio/music processing tasks."
 category = "main"
 optional = false
 python-versions = "*"
+develop = false
 
 [package.dependencies]
 future = "*"
@@ -300,6 +301,12 @@ six = "*"
 [package.extras]
 display = ["matplotlib (>=1.5.0)", "scipy (>=1.0.0)"]
 testing = ["matplotlib (>=2.1.0,<3)"]
+
+[package.source]
+type = "git"
+url = "https://github.com/leighsmith/mir_eval.git"
+reference = "optimise_sonification"
+resolved_reference = "d93397f50ec6a233f68e00c129478af12e87f4ec"
 
 [[package]]
 name = "numba"
@@ -767,7 +774,7 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.13"
-content-hash = "4ada97f394359f52257a0938eb629a7ea7f680141c254b9bb40b653c62544387"
+content-hash = "11bb0c3f9dd606d453a22f78cd19e544dcebdcf5c6e5183fb6ae81ad4ee8d8e5"
 
 [metadata.files]
 absl-py = [
@@ -1146,9 +1153,7 @@ markupsafe = [
     {file = "MarkupSafe-2.1.2-cp39-cp39-win_amd64.whl", hash = "sha256:0576fe974b40a400449768941d5d0858cc624e3249dfd1e0c33674e5c7ca7aed"},
     {file = "MarkupSafe-2.1.2.tar.gz", hash = "sha256:abcabc8c2b26036d62d4c746381a6f7cf60aafcc653198ad678306986b09450d"},
 ]
-mir-eval = [
-    {file = "mir_eval-0.7.tar.gz", hash = "sha256:e1febaa5766c65a7545c2a170b241490f47a98987370b1e06742424c5debe65e"},
-]
+mir-eval = []
 numba = [
     {file = "numba-0.53.1-cp36-cp36m-macosx_10_14_x86_64.whl", hash = "sha256:b23de6b6837c132087d06b8b92d343edb54b885873b824a037967fbd5272ebb7"},
     {file = "numba-0.53.1-cp36-cp36m-manylinux2014_i686.whl", hash = "sha256:6545b9e9b0c112b81de7f88a3c787469a357eeff8211e90b8f45ee243d521cc2"},
